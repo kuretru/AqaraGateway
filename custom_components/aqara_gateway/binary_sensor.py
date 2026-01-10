@@ -6,6 +6,8 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorDeviceClass,
 )
+from homeassistant.components.event import EventEntity
+
 try:
     from homeassistant.core_config import DATA_CUSTOMIZE
 except:
@@ -42,8 +44,7 @@ from .core.const import (
     VOLTAGE,
     VIBRATION,
     SMOKE_DENSITY,
-    )
-
+)
 
 DEVICE_CLASS = {
     'contact': BinarySensorDeviceClass.DOOR,
@@ -53,6 +54,7 @@ DEVICE_CLASS = {
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     """ Perform the setup for Xiaomi/Aqara devices. """
+
     def setup(gateway: Gateway, device: dict, attr: str):
         if attr == 'action':
             async_add_entities([GatewayAction(gateway, device, attr)])
@@ -128,10 +130,10 @@ class GatewayNatgasSensor(GatewayBinarySensor, BinarySensorEntity):
     """Representation of a Xiaomi/Aqara Natgas Sensor."""
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Natgas Sensor."""
         self._state = False
@@ -178,10 +180,10 @@ class GatewayMotionSensor(GatewayBinarySensor):
     """Representation of a Xiaomi/Aqara Motion Sensor."""
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Motion Sensor."""
         self._default_delay = None
@@ -196,7 +198,7 @@ class GatewayMotionSensor(GatewayBinarySensor):
         self._voltage = None
         self._open_since = None
         self.is_metric = False
-        #if device['model'] in ('lumi.motion.agl02', 'lumi.sensor_motion.aq2', 'lumi.motion.agl04'):
+        # if device['model'] in ('lumi.motion.agl02', 'lumi.sensor_motion.aq2', 'lumi.motion.agl04'):
         #    self.is_metric = False
         super().__init__(gateway, device, attr)
 
@@ -325,10 +327,10 @@ class GatewayDoorSensor(GatewayBinarySensor, BinarySensorEntity):
     """Representation of a Xiaomi/Aqara Door Sensor."""
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Door Sensor."""
         self._state = False
@@ -396,10 +398,10 @@ class GatewaWaterLeakSensor(GatewayBinarySensor, BinarySensorEntity):
     """Representation of a Xiaomi/Aqara Water Leak Sensor."""
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Water Leak Sensor."""
         self._state = False
@@ -460,10 +462,10 @@ class GatewaySmokeSensor(GatewayBinarySensor, BinarySensorEntity):
     """Representation of a Xiaomi/Aqara Smoke Sensor."""
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Button Switch."""
         self._state = False
@@ -512,14 +514,14 @@ class GatewaySmokeSensor(GatewayBinarySensor, BinarySensorEntity):
         self.schedule_update_ha_state()
 
 
-class GatewayButtonSwitch(GatewayBinarySensor, BinarySensorEntity):
+class GatewayButtonSwitch(GatewayBinarySensor, EventEntity):
     """ Xiaomi/Aqara Button Switch """
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Button Switch."""
         self._state = False
@@ -616,10 +618,10 @@ class GatewayAction(GatewayBinarySensor, BinarySensorEntity):
     """ Xiaomi/Aqara Action Cube """
 
     def __init__(
-        self,
-        gateway,
-        device,
-        attr,
+            self,
+            gateway,
+            device,
+            attr,
     ):
         """Initialize the Xiaomi/Aqara Action Cube."""
         self._state = False
@@ -630,7 +632,7 @@ class GatewayAction(GatewayBinarySensor, BinarySensorEntity):
         self._rotate_angle = None
         self.with_rotation = False
         if (device['model'] in ('lumi.remote.rkba01', 'lumi.switch.rkna01',
-                'lumi.remote.cagl01', 'lumi.remote.cagl02')):
+                                'lumi.remote.cagl01', 'lumi.remote.cagl02')):
             self.with_rotation = True
         if device['model'] == 'lumi.motion.agl04':
             self.is_metric = True
@@ -707,7 +709,7 @@ class GatewayAction(GatewayBinarySensor, BinarySensorEntity):
                 data[self._attr] = key + '_' + CUBE.get(value, 'unknown')
                 break
             if key in ('mode', 'vibration_level', 'detect_interval',
-                    'vibrate_intensity_level', 'report_interval_level'):
+                       'vibrate_intensity_level', 'report_interval_level'):
                 self._attrs[key] = value
                 break
             if key.startswith('scense'):
